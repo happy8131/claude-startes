@@ -6,7 +6,7 @@ export function Footer() {
 
   return (
     <footer className="border-t">
-      <div className="container py-8 md:py-12">
+      <div className="container mx-auto py-8 md:py-12">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           {/* 브랜드 */}
           <div className="space-y-3">

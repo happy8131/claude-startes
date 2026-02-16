@@ -11,7 +11,7 @@ import { Check, X, AlertCircle } from 'lucide-react'
 export default function ComponentsPage() {
   return (
     <MainLayout>
-      <div className="container py-8">
+      <div className="container mx-auto py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight">컴포넌트 쇼케이스</h1>
           <p className="text-muted-foreground">

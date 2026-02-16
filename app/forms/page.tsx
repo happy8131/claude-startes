@@ -12,7 +12,7 @@ import { Switch } from '@/components/ui/switch'
 export default function FormsPage() {
   return (
     <MainLayout>
-      <div className="container py-8">
+      <div className="container mx-auto py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight">폼 예제</h1>
           <p className="text-muted-foreground">

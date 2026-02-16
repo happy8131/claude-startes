@@ -7,7 +7,7 @@ import { Activity, Users, CreditCard, DollarSign } from 'lucide-react'
 export default function DashboardPage() {
   return (
     <MainLayout>
-      <div className="container py-8">
+      <div className="container mx-auto py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight">대시보드</h1>
           <p className="text-muted-foreground">

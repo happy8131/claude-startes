@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <MainLayout>
       {/* 히어로 섹션 */}
-      <section className="container flex flex-col items-center gap-8 py-24 md:py-32">
+      <section className="container mx-auto flex flex-col items-center gap-8 py-24 md:py-32">
         <Badge variant="secondary" className="mb-4">
           Next.js 16 + React 19
         </Badge>
@@ -36,7 +36,7 @@ export default function Home() {
       </section>
 
       {/* 특징 섹션 */}
-      <section className="container py-24 md:py-32">
+      <section className="container mx-auto py-24 md:py-32">
         <div className="mb-12 text-center">
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
             주요 특징
@@ -91,7 +91,7 @@ export default function Home() {
 
       {/* 기술 스택 섹션 */}
       <section className="border-t bg-muted/50 py-24 md:py-32">
-        <div className="container">
+        <div className="container mx-auto">
           <div className="mb-12 text-center">
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
               기술 스택
