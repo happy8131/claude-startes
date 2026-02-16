@@ -1,12 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm install:*)",
-      "Bash(npx shadcn@latest add button card input label badge dropdown-menu separator avatar dialog sheet tabs form select textarea switch toast toaster table --yes)",
-      "Bash(npx shadcn@latest add:*)",
-      "Bash(curl:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash",
+      "mcp__playwright"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "playwright"
+  ],
+  "enableAllProjectMcpServers": true
 }
