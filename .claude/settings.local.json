@@ -2,11 +2,12 @@
   "permissions": {
     "allow": [
       "Bash",
-      "mcp__playwright"
+      "mcp__playwright",
+      "Skill(keybindings-help)"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "playwright"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }
