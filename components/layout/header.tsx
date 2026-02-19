@@ -12,10 +12,6 @@ import {
 
 const navigation = [
   { name: '홈', href: '/' },
-  { name: '대시보드', href: '/dashboard' },
-  { name: '컴포넌트', href: '/components' },
-  { name: '폼 예제', href: '/forms' },
-  { name: '테이블', href: '/tables' },
 ]
 
 export function Header() {
@@ -24,7 +20,7 @@ export function Header() {
       <div className="container mx-auto flex h-16 items-center">
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-bold text-xl">Next.js 스타터킷</span>
+            <span className="font-bold text-xl">견적서 뷰어</span>
           </Link>
         </div>
 

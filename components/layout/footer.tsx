@@ -10,9 +10,9 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           {/* 브랜드 */}
           <div className="space-y-3">
-            <h3 className="text-lg font-semibold">Next.js 스타터킷</h3>
+            <h3 className="text-lg font-semibold">Notion 견적서 뷰어</h3>
             <p className="text-sm text-muted-foreground">
-              Next.js 16, TypeScript, Tailwind CSS로 구축된 모던 웹 애플리케이션 스타터킷
+              Notion 데이터베이스의 견적서를 웹으로 확인하고 PDF로 다운로드하세요
             </p>
           </div>
 
@@ -23,16 +23,6 @@ export function Footer() {
               <li>
                 <Link href="/" className="text-muted-foreground hover:text-foreground">
                   홈
-                </Link>
-              </li>
-              <li>
-                <Link href="/dashboard" className="text-muted-foreground hover:text-foreground">
-                  대시보드
-                </Link>
-              </li>
-              <li>
-                <Link href="/components" className="text-muted-foreground hover:text-foreground">
-                  컴포넌트
                 </Link>
               </li>
             </ul>
@@ -74,16 +64,8 @@ export function Footer() {
 
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} Next.js 스타터킷. All rights reserved.
+            © {currentYear} Notion 견적서 뷰어. All rights reserved.
           </p>
-          <div className="flex gap-4 text-sm text-muted-foreground">
-            <Link href="/privacy" className="hover:text-foreground">
-              개인정보처리방침
-            </Link>
-            <Link href="/terms" className="hover:text-foreground">
-              이용약관
-            </Link>
-          </div>
         </div>
       </div>
     </footer>
