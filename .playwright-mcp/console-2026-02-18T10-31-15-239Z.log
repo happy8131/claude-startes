@@ -1,0 +1,2 @@
+[   55448ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/register?_rsc=5c339:0
+[   55597ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/register:0
