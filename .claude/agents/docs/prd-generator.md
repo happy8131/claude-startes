@@ -236,7 +236,7 @@ model: sonnet
 
 ### 🎨 프론트엔드 프레임워크
 
-- **Next.js 15** (App Router) - React 풀스택 프레임워크
+- **Next.js 16** (App Router) - React 풀스택 프레임워크
 - **TypeScript 5.6+** - 타입 안전성 보장
 - **React 19** - UI 라이브러리 (최신 동시성 기능)
 
@@ -258,7 +258,7 @@ model: sonnet
 
 ### 🚀 배포 & 호스팅
 
-- **Vercel** - Next.js 15 최적화 배포 플랫폼
+- **Vercel** - Next.js 16 최적화 배포 플랫폼
 
 ### 📦 패키지 관리
 
@@ -288,7 +288,7 @@ model: sonnet
 
 **기술 스택 작성 시 반드시**:
 
-- Next.js 15 (현재 최신버전)
+- Next.js 16 (현재 최신버전)
 - React 19 (현재 최신버전)
 - TailwindCSS v4 (설정파일 없는 새로운 방식)
 - 각 기술의 최신 버전 확인 후 명시
