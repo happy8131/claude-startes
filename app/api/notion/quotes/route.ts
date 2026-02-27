@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getQuoteByShareToken } from '@/lib/notion/database'
+import { getInvoiceById } from '@/lib/notion/database'
 
 /**
- * GET /api/notion/quotes?shareToken=xxx
+ * GET /api/notion/invoices?id=xxx
  *
- * shareToken으로 견적서 데이터 조회
+ * Notion 페이지 ID로 견적서 데이터 조회
  *
  * Query Parameters:
- * - shareToken: 공유 토큰 (필수)
+ * - id: Notion 페이지 ID (필수)
  *
  * Response:
  * - 200: 견적서 데이터
@@ -18,23 +18,23 @@ import { getQuoteByShareToken } from '@/lib/notion/database'
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const shareToken = searchParams.get('shareToken')
+    const invoiceId = searchParams.get('id')
 
-    // shareToken 파라미터 확인
-    if (!shareToken) {
+    // 파라미터 확인
+    if (!invoiceId) {
       return NextResponse.json(
         {
           success: false,
-          error: 'shareToken 파라미터가 필요합니다.',
+          error: 'id 파라미터가 필요합니다.',
         },
         { status: 400 }
       )
     }
 
     // Notion 데이터베이스에서 견적서 조회
-    const quote = await getQuoteByShareToken(shareToken)
+    const invoice = await getInvoiceById(invoiceId)
 
-    if (!quote) {
+    if (!invoice) {
       return NextResponse.json(
         {
           success: false,
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        data: quote,
+        data: invoice,
       },
       { status: 200 }
     )

@@ -2,11 +2,11 @@
 
 import { Button } from '@/components/ui/button'
 import { useMounted } from '@/hooks/use-mounted'
-import { Quote } from '@/lib/types/quote'
+import { Invoice } from '@/lib/types/invoice'
 import { useState } from 'react'
 
 interface PdfExportProps {
-  quote: Quote
+  invoice: Invoice
   elementRef: React.RefObject<HTMLDivElement | null>
 }
 
@@ -16,9 +16,9 @@ interface PdfExportProps {
  * HTML 요소를 PDF로 변환 후 다운로드합니다.
  * 'use client' 컴포넌트로 브라우저에서만 실행됩니다.
  *
- * window.print()를 사용하여 PDF 인쇄 기능을 제공합니다.
+ * html2pdf.js를 사용하여 PDF 변환 기능을 제공합니다.
  */
-export function PdfExport({ quote, elementRef }: PdfExportProps) {
+export function PdfExport({ invoice, elementRef }: PdfExportProps) {
   const mounted = useMounted()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -43,7 +43,7 @@ export function PdfExport({ quote, elementRef }: PdfExportProps) {
       // PDF 옵션 설정
       const opt = {
         margin: 10,
-        filename: `견적서_${quote.quoteNumber}.pdf`,
+        filename: `견적서_${invoice.invoiceNumber}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' },
