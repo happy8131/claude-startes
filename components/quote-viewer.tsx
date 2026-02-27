@@ -109,7 +109,11 @@ export function QuoteViewer({ invoice }: InvoiceViewerProps) {
           <div className="w-full max-w-full sm:max-w-xs space-y-2 border-t pt-4">
             <div className="flex justify-between border-t pt-2 text-lg font-bold">
               <span>합계</span>
-              <span>{formatCurrency(invoice.totalAmount)}</span>
+              <span>
+                {formatCurrency(
+                  invoice.items.reduce((sum, item) => sum + item.amount, 0)
+                )}
+              </span>
             </div>
           </div>
         </div>
