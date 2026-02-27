@@ -50,7 +50,7 @@ export function QuoteViewer({ invoice }: InvoiceViewerProps) {
         </div>
 
         {/* 날짜 정보 */}
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
           <div>
             <p className="font-semibold text-gray-600">발행일</p>
             <p className="text-lg">{formatDate(new Date(invoice.issueDate))}</p>
@@ -74,37 +74,39 @@ export function QuoteViewer({ invoice }: InvoiceViewerProps) {
         {/* 품목 테이블 */}
         <div className="space-y-4">
           <h2 className="font-semibold">견적 품목</h2>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>품목명</TableHead>
-                <TableHead className="text-right">수량</TableHead>
-                <TableHead className="text-right">단가</TableHead>
-                <TableHead className="text-right">금액</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {invoice.items.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    <p className="font-medium">{item.name}</p>
-                  </TableCell>
-                  <TableCell className="text-right">{item.quantity}</TableCell>
-                  <TableCell className="text-right">
-                    {formatCurrency(item.unitPrice)}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {formatCurrency(item.amount)}
-                  </TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>품목명</TableHead>
+                  <TableHead className="text-right">수량</TableHead>
+                  <TableHead className="text-right">단가</TableHead>
+                  <TableHead className="text-right">금액</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {invoice.items.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      <p className="font-medium">{item.name}</p>
+                    </TableCell>
+                    <TableCell className="text-right">{item.quantity}</TableCell>
+                    <TableCell className="text-right">
+                      {formatCurrency(item.unitPrice)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {formatCurrency(item.amount)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
 
         {/* 합계 정보 */}
         <div className="flex justify-end">
-          <div className="w-full max-w-xs space-y-2 border-t pt-4">
+          <div className="w-full max-w-full sm:max-w-xs space-y-2 border-t pt-4">
             <div className="flex justify-between border-t pt-2 text-lg font-bold">
               <span>합계</span>
               <span>{formatCurrency(invoice.totalAmount)}</span>

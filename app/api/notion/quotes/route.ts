@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getInvoiceById } from '@/lib/notion/database'
+import { validateNotionConfig } from '@/lib/notion/client'
 
 /**
  * GET /api/notion/invoices?id=xxx
@@ -17,6 +18,9 @@ import { getInvoiceById } from '@/lib/notion/database'
  */
 export async function GET(request: NextRequest) {
   try {
+    // Notion 환경변수 검증
+    validateNotionConfig()
+
     const { searchParams } = new URL(request.url)
     const invoiceId = searchParams.get('id')
 

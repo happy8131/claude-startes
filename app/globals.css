@@ -126,3 +126,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* 인쇄 스타일 */
+@media print {
+  header,
+  footer,
+  button {
+    @apply print:hidden;
+  }
+
+  body {
+    @apply bg-white;
+  }
+
+  .print\:hidden {
+    @apply hidden;
+  }
+}
