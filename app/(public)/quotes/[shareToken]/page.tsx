@@ -17,7 +17,8 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   try {
     // shareToken은 실제로 Notion 페이지 ID
-    const invoice = await getInvoiceById(params.shareToken)
+    const resolvedParams = await Promise.resolve(params)
+    const invoice = await getInvoiceById(resolvedParams.shareToken)
 
     if (!invoice) {
       return {
@@ -52,7 +53,8 @@ export async function generateMetadata(
  */
 export default async function InvoicePage({ params }: InvoicePageProps) {
   // Notion에서 견적서 조회 (shareToken = Notion 페이지 ID)
-  const invoice = await getInvoiceById(params.shareToken)
+  const resolvedParams = await Promise.resolve(params)
+  const invoice = await getInvoiceById(resolvedParams.shareToken)
 
   // 견적서가 없으면 404 처리
   if (!invoice) {

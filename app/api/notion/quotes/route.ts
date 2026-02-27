@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getInvoiceById } from '@/lib/notion/database'
+import { getInvoiceById, getInvoices } from '@/lib/notion/database'
 import { validateNotionConfig } from '@/lib/notion/client'
 
 /**
- * GET /api/notion/invoices?id=xxx
+ * GET /api/notion/quotes
  *
- * Notion 페이지 ID로 견적서 데이터 조회
+ * Notion 데이터베이스에서 견적서 데이터 조회
  *
  * Query Parameters:
- * - id: Notion 페이지 ID (필수)
+ * - id: Notion 페이지 ID (개별 조회)
+ * - list: "true" (전체 목록 조회)
  *
  * Response:
- * - 200: 견적서 데이터
+ * - 200: 견적서 데이터 또는 목록
  * - 400: 파라미터 누락
  * - 404: 견적서 없음
  * - 500: 서버 오류
@@ -23,13 +24,27 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const invoiceId = searchParams.get('id')
+    const listParam = searchParams.get('list')
 
-    // 파라미터 확인
+    // 전체 목록 조회
+    if (listParam === 'true') {
+      const invoices = await getInvoices()
+
+      return NextResponse.json(
+        {
+          success: true,
+          data: invoices,
+        },
+        { status: 200 }
+      )
+    }
+
+    // 개별 견적서 조회 - 파라미터 확인
     if (!invoiceId) {
       return NextResponse.json(
         {
           success: false,
-          error: 'id 파라미터가 필요합니다.',
+          error: 'id 파라미터 또는 list=true 파라미터가 필요합니다.',
         },
         { status: 400 }
       )
