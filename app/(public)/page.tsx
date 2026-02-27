@@ -110,21 +110,35 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 샘플 견적서 CTA 섹션 */}
+      {/* 견적서 목록 및 샘플 CTA 섹션 */}
       <section className="container mx-auto py-24 md:py-32">
-        <div className="rounded-lg bg-primary/10 border border-primary/20 px-8 py-16 text-center">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
-            실시간 샘플 보기
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Notion 데이터베이스에서 실시간으로 불러온 샘플 견적서를 확인해보세요.
-            웹 뷰어의 모든 기능을 직접 체험할 수 있습니다.
-          </p>
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* 견적서 목록 */}
+          <Link href="/quotes">
+            <div className="rounded-lg bg-blue-50 border border-blue-200 p-8 hover:shadow-lg transition-shadow cursor-pointer h-full">
+              <h3 className="text-2xl font-bold mb-3 text-blue-900">견적서 목록</h3>
+              <p className="text-blue-700 mb-6">
+                Notion에 저장된 모든 견적서를 목록으로 확인하고 상세 정보를 볼 수 있습니다.
+              </p>
+              <Button variant="outline" className="gap-2 border-blue-300 text-blue-600 hover:bg-blue-100">
+                목록 보기
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </Link>
+
+          {/* 샘플 견적서 */}
           <Link href="/quotes/31485627-029d-8131-ac0c-f27ff3b013a3">
-            <Button size="lg" className="gap-2">
-              샘플 견적서 보기
-              <ArrowRight className="h-4 w-4" />
-            </Button>
+            <div className="rounded-lg bg-primary/10 border border-primary/20 p-8 hover:shadow-lg transition-shadow cursor-pointer h-full">
+              <h3 className="text-2xl font-bold mb-3">실시간 샘플 보기</h3>
+              <p className="text-muted-foreground mb-6">
+                Notion 데이터베이스에서 실시간으로 불러온 샘플 견적서를 확인해보세요. 웹 뷰어의 모든 기능을 체험할 수 있습니다.
+              </p>
+              <Button size="lg" className="gap-2">
+                샘플 견적서 보기
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
           </Link>
         </div>
       </section>

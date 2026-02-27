@@ -107,19 +107,16 @@ export async function getInvoiceItems(itemIds: string[]): Promise<InvoiceItem[]>
 /**
  * 전체 견적서 목록 조회 (상태 필터 옵션)
  *
- * 주의: Notion SDK의 databases.query() 메서드 필요
+ * Notion REST API를 직접 호출하여 모든 견적서를 조회합니다.
  */
 export async function getInvoices(status?: InvoiceStatus): Promise<Invoice[]> {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const notion_any = notion as any
-
-    if (!notion_any.databases?.query) {
-      console.warn('notion.databases.query는 사용할 수 없습니다.')
-      return []
-    }
-
     const databaseId = getDatabaseId()
+    const apiKey = process.env.NOTION_API_KEY
+
+    if (!apiKey) {
+      throw new Error('NOTION_API_KEY 환경변수가 설정되지 않았습니다.')
+    }
 
     // 상태 필터: TypeScript 타입(영어) → Notion 값(한국어) 변환
     const statusFilter = status
@@ -135,26 +132,43 @@ export async function getInvoices(status?: InvoiceStatus): Promise<Invoice[]> {
         }
       : undefined
 
-    const response = await notion_any.databases.query({
-      database_id: databaseId,
-      ...(filter && { filter }),
+    // Notion REST API 직접 호출
+    const response = await fetch('https://api.notion.com/v1/databases/' + databaseId + '/query', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Notion-Version': '2022-06-28',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(filter ? { filter } : {}),
     })
+
+    if (!response.ok) {
+      throw new Error(`Notion API 오류: ${response.statusText}`)
+    }
+
+    const data = (await response.json()) as { results?: PageObjectResponse[] }
+    const results = data.results || []
 
     const invoices: Invoice[] = []
 
-    for (const page of response.results) {
-      const pageObj = page as PageObjectResponse
-      const invoiceData = transformNotionPageToInvoice(pageObj)
+    for (const page of results) {
+      try {
+        const invoiceData = transformNotionPageToInvoice(page)
 
-      // Items 조회
-      const items = await getInvoiceItems(invoiceData.itemIds)
+        // Items 조회
+        const items = await getInvoiceItems(invoiceData.itemIds)
 
-      const invoice: Invoice = {
-        ...invoiceData,
-        items,
+        const invoice: Invoice = {
+          ...invoiceData,
+          items,
+        }
+
+        invoices.push(invoice)
+      } catch (err) {
+        console.warn('견적서 변환 오류:', err)
+        // 하나의 견적서 변환 실패해도 계속 진행
       }
-
-      invoices.push(invoice)
     }
 
     return invoices
