@@ -23,7 +23,12 @@ function transformNotionPageToInvoiceItem(page: PageObjectResponse): InvoiceItem
   const name = getTextProperty(props, '항목명')
   const quantity = getNumberProperty(props, '수량')
   const unitPrice = getNumberProperty(props, '단가')
-  const amount = getNumberProperty(props, '금액')
+  let amount = getNumberProperty(props, '금액')
+
+  // 금액이 0이면 수량 × 단가로 자동 계산
+  if (amount === 0 && quantity > 0 && unitPrice > 0) {
+    amount = quantity * unitPrice
+  }
 
   return {
     id: page.id,
