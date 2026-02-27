@@ -1,10 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { MainLayout } from '@/components/layout/main-layout'
 import { Download, Eye, Lock } from 'lucide-react'
 
 export default function Home() {
   return (
-    <MainLayout>
+    <>
       {/* 히어로 섹션 */}
       <section className="container mx-auto flex flex-col items-center gap-8 py-24 md:py-32">
         <h1 className="text-center text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
@@ -108,6 +107,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </MainLayout>
+    </>
   )
 }

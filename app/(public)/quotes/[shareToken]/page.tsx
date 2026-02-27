@@ -2,7 +2,6 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getQuoteByShareToken } from '@/lib/notion/database'
 import { QuoteViewer } from '@/components/quote-viewer'
-import { MainLayout } from '@/components/layout/main-layout'
 
 interface QuotePageProps {
   params: {
@@ -60,12 +59,10 @@ export default async function QuotePage({ params }: QuotePageProps) {
   }
 
   return (
-    <MainLayout>
-      <div className="min-h-screen bg-gray-50 py-8 px-4">
-        <div className="mx-auto max-w-4xl">
-          <QuoteViewer quote={quote} />
-        </div>
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="mx-auto max-w-4xl">
+        <QuoteViewer quote={quote} />
       </div>
-    </MainLayout>
+    </div>
   )
 }
