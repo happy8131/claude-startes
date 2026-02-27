@@ -1,5 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Download, Eye, Lock } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Download, Eye, Lock, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -105,6 +107,25 @@ export default function Home() {
               </CardContent>
             </Card>
           </div>
+        </div>
+      </section>
+
+      {/* 샘플 견적서 CTA 섹션 */}
+      <section className="container mx-auto py-24 md:py-32">
+        <div className="rounded-lg bg-primary/10 border border-primary/20 px-8 py-16 text-center">
+          <h2 className="text-3xl font-bold tracking-tight md:text-4xl mb-4">
+            실시간 샘플 보기
+          </h2>
+          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Notion 데이터베이스에서 실시간으로 불러온 샘플 견적서를 확인해보세요.
+            웹 뷰어의 모든 기능을 직접 체험할 수 있습니다.
+          </p>
+          <Link href="/quotes/31485627-029d-8131-ac0c-f27ff3b013a3">
+            <Button size="lg" className="gap-2">
+              샘플 견적서 보기
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       </section>
     </>
