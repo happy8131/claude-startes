@@ -1,6 +1,3 @@
-'use client'
-
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -8,40 +5,24 @@ import { Button } from '@/components/ui/button'
 import { formatDate, formatCurrency } from '@/lib/format'
 import { INVOICE_STATUS_LABEL } from '@/lib/types/invoice'
 import type { Invoice } from '@/lib/types/invoice'
+import { getInvoices } from '@/lib/notion/database'
 import { ChevronRight } from 'lucide-react'
 
 /**
  * 견적서 목록 페이지
  *
- * Notion 데이터베이스의 모든 견적서를 리스트로 표시합니다.
+ * Server Component로 Notion 데이터베이스의 모든 견적서를 조회하여 표시합니다.
  */
-export default function QuotesListPage() {
-  const [invoices, setInvoices] = useState<Invoice[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+export default async function QuotesListPage() {
+  let invoices: Invoice[] = []
+  let error: string | null = null
 
-  useEffect(() => {
-    const fetchInvoices = async () => {
-      try {
-        setIsLoading(true)
-        const response = await fetch('/api/notion/quotes?list=true')
-        const data = (await response.json()) as { success: boolean; data?: Invoice[]; error?: string }
-
-        if (!data.success || !data.data) {
-          setError(data.error || '견적서를 불러올 수 없습니다.')
-          return
-        }
-
-        setInvoices(data.data)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : '오류가 발생했습니다.')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchInvoices()
-  }, [])
+  try {
+    invoices = await getInvoices()
+  } catch (err) {
+    error = err instanceof Error ? err.message : '견적서를 불러올 수 없습니다.'
+    console.error('견적서 목록 조회 오류:', err)
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
@@ -51,13 +32,6 @@ export default function QuotesListPage() {
           <h1 className="text-4xl font-bold mb-2">견적서 목록</h1>
           <p className="text-gray-600">Notion에 저장된 모든 견적서를 확인하세요.</p>
         </div>
-
-        {/* 로딩 상태 */}
-        {isLoading && (
-          <div className="text-center py-12">
-            <p className="text-gray-600">견적서를 불러오는 중...</p>
-          </div>
-        )}
 
         {/* 에러 상태 */}
         {error && (
@@ -69,7 +43,7 @@ export default function QuotesListPage() {
         )}
 
         {/* 빈 상태 */}
-        {!isLoading && !error && invoices.length === 0 && (
+        {!error && invoices.length === 0 && (
           <Card>
             <CardContent className="pt-6">
               <p className="text-center text-gray-600">견적서가 없습니다.</p>
@@ -78,7 +52,7 @@ export default function QuotesListPage() {
         )}
 
         {/* 견적서 목록 */}
-        {!isLoading && !error && invoices.length > 0 && (
+        {!error && invoices.length > 0 && (
           <div className="grid gap-4">
             {invoices.map((invoice) => (
               <Link key={invoice.id} href={`/quotes/${invoice.id}`}>
@@ -124,7 +98,7 @@ export default function QuotesListPage() {
         )}
 
         {/* 총 개수 */}
-        {!isLoading && !error && invoices.length > 0 && (
+        {!error && invoices.length > 0 && (
           <div className="mt-8 text-center text-sm text-gray-600">
             총 {invoices.length}개의 견적서
           </div>

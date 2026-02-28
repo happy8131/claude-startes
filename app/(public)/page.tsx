@@ -2,8 +2,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Download, Eye, Lock, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { getInvoices } from '@/lib/notion/database'
+import { formatDate, formatCurrency } from '@/lib/format'
+import { INVOICE_STATUS_LABEL } from '@/lib/types/invoice'
+import { Badge } from '@/components/ui/badge'
+import { ChevronRight } from 'lucide-react'
 
-export default function Home() {
+export default async function Home() {
+  // Server Component에서 견적서 목록 조회
+  let invoices = []
+  try {
+    invoices = await getInvoices()
+  } catch (error) {
+    console.error('견적서 목록 조회 오류:', error)
+  }
+
   return (
     <>
       {/* 히어로 섹션 */}
@@ -19,6 +32,74 @@ export default function Home() {
           웹 링크로 쉽게 공유하고 PDF로 다운로드하세요
         </p>
       </section>
+
+      {/* 견적서 목록 섹션 */}
+      {invoices.length > 0 && (
+        <section id="quotes" className="border-t bg-muted/50 py-24 md:py-32">
+          <div className="container mx-auto">
+            <div className="mb-12">
+              <h2 className="text-3xl font-bold tracking-tight md:text-4xl mb-2">
+                견적서 목록
+              </h2>
+              <p className="text-muted-foreground">
+                Notion에 저장된 모든 견적서를 확인하고 상세 정보를 볼 수 있습니다.
+              </p>
+            </div>
+
+            <div className="grid gap-4">
+              {invoices.map((invoice) => (
+                <Link key={invoice.id} href={`/quotes/${invoice.id}`}>
+                  <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg mb-2">
+                            {invoice.invoiceNumber}
+                          </CardTitle>
+                          <p className="text-sm text-gray-600 mb-2">
+                            {invoice.clientName}
+                          </p>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <Badge variant="outline">{INVOICE_STATUS_LABEL[invoice.status]}</Badge>
+                            <span className="text-xs text-gray-500">
+                              발행일: {formatDate(new Date(invoice.issueDate))}
+                            </span>
+                          </div>
+                        </div>
+                        <ChevronRight className="h-5 w-5 text-gray-400 mt-1" />
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1">금액</p>
+                          <p className="text-lg font-bold text-blue-600">
+                            {formatCurrency(
+                              invoice.items.reduce((sum, item) => sum + item.amount, 0)
+                            )}
+                          </p>
+                        </div>
+                        <Button size="sm" variant="ghost">
+                          보기
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-8 text-center">
+              <Link href="/quotes">
+                <Button size="lg" variant="outline" className="gap-2">
+                  전체 목록 보기
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 특징 섹션 */}
       <section className="container mx-auto py-24 md:py-32">
@@ -110,37 +191,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 견적서 목록 및 샘플 CTA 섹션 */}
+      {/* 샘플 견적서 CTA 섹션 */}
       <section className="container mx-auto py-24 md:py-32">
-        <div className="grid gap-6 md:grid-cols-2">
-          {/* 견적서 목록 */}
-          <Link href="/quotes">
-            <div className="rounded-lg bg-blue-50 border border-blue-200 p-8 hover:shadow-lg transition-shadow cursor-pointer h-full">
-              <h3 className="text-2xl font-bold mb-3 text-blue-900">견적서 목록</h3>
-              <p className="text-blue-700 mb-6">
-                Notion에 저장된 모든 견적서를 목록으로 확인하고 상세 정보를 볼 수 있습니다.
-              </p>
-              <Button variant="outline" className="gap-2 border-blue-300 text-blue-600 hover:bg-blue-100">
-                목록 보기
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </Link>
-
-          {/* 샘플 견적서 */}
-          <Link href="/quotes/31485627-029d-8131-ac0c-f27ff3b013a3">
-            <div className="rounded-lg bg-primary/10 border border-primary/20 p-8 hover:shadow-lg transition-shadow cursor-pointer h-full">
-              <h3 className="text-2xl font-bold mb-3">실시간 샘플 보기</h3>
-              <p className="text-muted-foreground mb-6">
-                Notion 데이터베이스에서 실시간으로 불러온 샘플 견적서를 확인해보세요. 웹 뷰어의 모든 기능을 체험할 수 있습니다.
-              </p>
-              <Button size="lg" className="gap-2">
-                샘플 견적서 보기
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </Link>
-        </div>
+        <Link href="/quotes/31485627-029d-8131-ac0c-f27ff3b013a3">
+          <div className="rounded-lg bg-primary/10 border border-primary/20 p-8 hover:shadow-lg transition-shadow cursor-pointer">
+            <h3 className="text-2xl font-bold mb-3">실시간 샘플 견적서</h3>
+            <p className="text-muted-foreground mb-6">
+              Notion 데이터베이스에서 실시간으로 불러온 샘플 견적서를 확인해보세요. 웹 뷰어의 모든 기능을 체험할 수 있습니다.
+            </p>
+            <Button size="lg" className="gap-2">
+              샘플 견적서 보기
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </Link>
       </section>
     </>
   )

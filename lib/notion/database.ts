@@ -1,7 +1,16 @@
+import { cache } from 'react'
+import { unstable_cache } from 'next/cache'
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints'
 import { notion } from '@/lib/notion/client'
 import { transformNotionPageToInvoice, getNumberProperty, getTextProperty } from '@/lib/notion/helpers'
 import { Invoice, InvoiceItem, InvoiceStatus, INVOICE_STATUS_MAP } from '@/lib/types/invoice'
+
+/**
+ * 캐싱 전략:
+ * 1. React.cache() - 단일 요청 중 중복 호출 방지 (자동 메모이제이션)
+ * 2. unstable_cache() - 여러 요청 간 캐싱 (기본 60초)
+ * 3. revalidateTag() - 필요시 캐시 무효화
+ */
 
 /**
  * 데이터베이스 ID 확인
@@ -40,12 +49,12 @@ function transformNotionPageToInvoiceItem(page: PageObjectResponse): InvoiceItem
 }
 
 /**
- * Invoice ID로 단일 견적서 조회
+ * Invoice ID로 단일 견적서 조회 (내부 구현)
  *
  * Notion 페이지 ID를 사용하여 조회합니다.
  * Items 관계형 데이터베이스의 모든 항목을 함께 조회합니다.
  */
-export async function getInvoiceById(invoiceId: string): Promise<Invoice | null> {
+async function getInvoiceByIdImpl(invoiceId: string): Promise<Invoice | null> {
   try {
     const page = await notion.pages.retrieve({
       page_id: invoiceId,
@@ -105,11 +114,11 @@ export async function getInvoiceItems(itemIds: string[]): Promise<InvoiceItem[]>
 }
 
 /**
- * 전체 견적서 목록 조회 (상태 필터 옵션)
+ * 전체 견적서 목록 조회 (내부 구현, 상태 필터 옵션)
  *
  * Notion REST API를 직접 호출하여 모든 견적서를 조회합니다.
  */
-export async function getInvoices(status?: InvoiceStatus): Promise<Invoice[]> {
+async function getInvoicesImpl(status?: InvoiceStatus): Promise<Invoice[]> {
   try {
     const databaseId = getDatabaseId()
     const apiKey = process.env.NOTION_API_KEY
@@ -177,3 +186,30 @@ export async function getInvoices(status?: InvoiceStatus): Promise<Invoice[]> {
     return []
   }
 }
+
+/**
+ * 캐시된 단일 견적서 조회 (요청 중 중복 호출 방지)
+ *
+ * React.cache()를 사용하여 같은 요청 중 중복 호출을 방지합니다.
+ * 예: 같은 페이지에서 여러 컴포넌트가 동일 ID로 조회해도 1번만 API 호출
+ */
+export const getInvoiceById = cache((invoiceId: string) => getInvoiceByIdImpl(invoiceId))
+
+/**
+ * 캐시된 견적서 목록 조회 (여러 요청 간 캐싱)
+ *
+ * unstable_cache()를 사용하여 60초간 캐싱합니다.
+ * 예: 홈페이지와 목록 페이지가 동시에 로드되어도 캐시된 데이터 사용
+ *
+ * 캐시 무효화:
+ * - 수동: import { revalidateTag } from 'next/cache'; revalidateTag('invoices')
+ * - API: POST /api/revalidate?tag=invoices (Notion 웹훅 통합 시)
+ */
+export const getInvoices = unstable_cache(
+  (status?: InvoiceStatus) => getInvoicesImpl(status),
+  ['invoices'],
+  {
+    revalidate: 60, // 60초마다 재검증
+    tags: ['invoices'], // 캐시 태그
+  }
+)

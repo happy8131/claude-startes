@@ -12,6 +12,7 @@ import {
 
 const navigation = [
   { name: '홈', href: '/' },
+  { name: '견적서 목록', href: '#quotes' },
 ]
 
 export function Header() {
