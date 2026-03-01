@@ -116,7 +116,7 @@ export function InvoiceTable({ invoices }: InvoiceTableProps) {
                           {invoice.items.length}개
                         </TableCell>
                         <TableCell className="text-right">
-                          <Link href={`/quotes/${invoice.invoiceNumber}`}>
+                          <Link href={`/quotes/${invoice.id}`}>
                             <Button variant="ghost" size="sm">
                               보기
                             </Button>
