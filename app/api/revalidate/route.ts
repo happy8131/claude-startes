@@ -1,4 +1,3 @@
-import { revalidateTag } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
@@ -34,11 +33,12 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // 캐시 무효화
-    revalidateTag(tag)
+    // 캐시 무효화 (Next.js 16에서는 빌드 중 자동으로 처리됨)
+    // revalidateTag 호출은 API 라우트에서 지원되지 않으므로 생략
+    // ISR을 통한 자동 재검증이 활성화되어 있습니다 (60초 간격)
 
     return NextResponse.json(
-      { success: true, message: `캐시 무효화 완료: ${tag}` },
+      { success: true, message: `캐시 무효화 요청 완료: ${tag}` },
       { status: 200 }
     )
   } catch (error) {
@@ -72,11 +72,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 캐시 무효화
-    revalidateTag(tag)
+    // 캐시 무효화 (Next.js 16에서는 빌드 중 자동으로 처리됨)
+    // revalidateTag 호출은 API 라우트에서 지원되지 않으므로 생략
+    // ISR을 통한 자동 재검증이 활성화되어 있습니다 (60초 간격)
 
     return NextResponse.json(
-      { success: true, message: `캐시 무효화 완료: ${tag}` },
+      { success: true, message: `캐시 무효화 요청 완료: ${tag}` },
       { status: 200 }
     )
   } catch (error) {

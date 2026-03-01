@@ -4,13 +4,13 @@ import { Download, Eye, Lock, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { getInvoices } from '@/lib/notion/database'
 import { formatDate, formatCurrency } from '@/lib/format'
-import { INVOICE_STATUS_LABEL } from '@/lib/types/invoice'
+import { INVOICE_STATUS_LABEL, Invoice } from '@/lib/types/invoice'
 import { Badge } from '@/components/ui/badge'
 import { ChevronRight } from 'lucide-react'
 
 export default async function Home() {
   // Server Component에서 견적서 목록 조회
-  let invoices = []
+  let invoices: Invoice[] = []
   try {
     invoices = await getInvoices()
   } catch (error) {
